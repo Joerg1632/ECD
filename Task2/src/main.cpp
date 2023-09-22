@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <string>
-#include <iomanip>
+
 using namespace std;
 
 double fact(long long n) {
