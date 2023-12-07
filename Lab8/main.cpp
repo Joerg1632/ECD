@@ -1,4 +1,4 @@
-#include <iostream>
+п»ї#include <iostream>
 #include <vector>
 #include <fstream>
 #include <x86intrin.h>
@@ -10,7 +10,7 @@
 void arrayTraverseDirect(std::vector<int>& arr) {
     for (int k = 0, i = 0; i < arr.size() * 3; i++) {
         k = arr[k];
-    }    
+    }
 }
 
 void directFilling(std::vector<int>& arr) {
@@ -23,7 +23,7 @@ void directFilling(std::vector<int>& arr) {
 
 void reverseFilling(std::vector<int>& arr) {
     int value = arr.size() - 1;
-    for (int i = arr.size() - 1; i > 0; i--){
+    for (int i = arr.size() - 1; i > 0; i--) {
         arr[i] = --value;
     }
     arr[0] = 254;
@@ -45,21 +45,21 @@ void sattolo(std::vector<int>& arr) {
 double measureAccessTime(void (*traversalFunction)(std::vector<int>&), std::vector<int>& arr, int repetitions = 3) {
 
     double minTime = std::numeric_limits<double>::max();
-    traversalFunction(arr); //Заполняем
-    arrayTraverseDirect(arr); //Прогреваем
+    traversalFunction(arr);
+    arrayTraverseDirect(arr);
     for (int rep = 0; rep < repetitions; ++rep) {
         unsigned long long start = __rdtsc();
         arrayTraverseDirect(arr);
         unsigned long long end = __rdtsc();
         double elapsedTime = static_cast<double>(end - start);
 
-        // Обновляем минимальное время, если получили более быстрый результат
+ 
         if (elapsedTime < minTime) {
             minTime = elapsedTime;
         }
     }
 
-    return minTime;
+    return minTime/arr.size()/3;
 }
 
 
@@ -68,7 +68,7 @@ int main() {
 
     const int minArraySize = 256;
     const int maxArraySize = 32 * 1024 * 1024;
-    int step = 256;
+    int step = 512;
     int percent10 = maxArraySize / 10;
     int wed = 10;
 
@@ -92,15 +92,14 @@ int main() {
             percent10 += maxArraySize / 10;
         }
 
-        // Изменение шага в зависимости от размера текущего массива
-        if (size >= 1024 * 1024) {
-            step = 1024 * 1024; // Если размер массива больше или равен 1 МБ, увеличиваем шаг до 1 МБ
+        if (size >= 3 * 1024 * 1024) {
+            step = 1024 * 1024;
         }
-        else if (size >= 256 * 1024) {
-            step = 256 * 1024; // Если размер массива больше или равен 256 КБ, увеличиваем шаг до 256 КБ
+        else if (size >= 512 * 1024) {
+            step = 256 * 1024;
         }
         else {
-            step = 256; // Иначе используем стандартный шаг 1 КБ
+            step = 1024; 
         }
     }
 
